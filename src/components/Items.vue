@@ -1,30 +1,47 @@
 <template>
     <div class="items">
-        <button id="inventario">inventario</button>
-
-        <ul id="itemList">
-            <li>Aqui los items...</li>
-        </ul>
         <form class="add-item">
-            <input type="text" name="nombre" placeholder="Nombre" required />
-            <input type="number" step="any" name="precio" placeholder="Precio" required />
-            <input type="number" name="calidad" placeholder="Calidad" required />
-            <input type="text" name="material" placeholder="Material" required />
-
-            <input type="number" name="demanda" placeholder="Demanda" required />
-            <input type="number" name="stock" placeholder="Stock" required />
+            <div class="inputsCaracteristicas">
+                <input type="text" name="nombre" placeholder="Nombre" required />
+                <input type="number" step="any" name="precio" placeholder="Precio" required />
+                <input type="number" name="calidad" placeholder="Calidad" required />
+                <input type="text" name="material" placeholder="Material" required />
+        
+                <input type="number" name="demanda" placeholder="Demanda" required />
+                <input type="number" name="stock" placeholder="Stock" required />
+            </div>
             <input type="submit" value="Añadir Item" />
             <input type="reset" value="Reset" />
         </form>
+        <button id="mostrarInventario" type="button" class="btn btn-primary">Mostrar inventario</button>
+        <button
+            id="ocultarInventario"
+            type="button"
+            class="btn btn-danger"
+            hidden
+        >Ocultar inventario</button>
+        <ul id="itemList">
+            <li>Aqui los items...</li>
+        </ul>
     </div>
 </template>
-
+<style>
+.inputsCaracteristicas {
+    display: flex;
+    flex-direction: column;
+    margin-left: 30%;
+    margin-right: 30%;
+}
+.inputsCaracteristicas > input {
+    margin: 4px;
+}
+</style>
 <script>
 window.onload = function () {
 
     const serverip = '127.0.0.1:3000'
-    
-    const inventButton = document.querySelector('#inventario');
+
+    const inventButton = document.getElementById('mostrarInventario');
     inventButton.addEventListener("click", inventario);
 
     function inventario() {
@@ -46,9 +63,12 @@ window.onload = function () {
                 if (response.ok) {
                     console.log("Response Status:", response.status);
                     console.log("Reponse statuts text:", response.statusText);
-                    response.json().then((json) =>{ logItems(json)
-                    console.log(json)})
-                    
+                    response.json().then((json) => {
+                        logItems(json)
+                        console.log(json)
+                    })
+                    changeInventButton();
+
                 } else {
                     console.log("Response Status:", response.status);
                     console.log("Reponse statuts text:", response.statusText);
@@ -59,9 +79,10 @@ window.onload = function () {
             });
     }
 
-    // intentar cachear con la cabecera mirando network de chrome
 
-   function logItems(items) {
+
+
+    function logItems(items) {
         const itemList = document.querySelector('#itemList');
         itemList.innerHTML = items.map((item, i) => {
             return `
@@ -80,6 +101,23 @@ window.onload = function () {
         }).join('');
     }
 
+    function changeInventButton() {
+        document.getElementById('ocultarInventario').hidden = !document.getElementById('ocultarInventario').hidden
+        document.getElementById('mostrarInventario').hidden = !document.getElementById('ocultarInventario').hidden
+
+
+    }
+
+
+
+    const ocultarButton = document.getElementById('ocultarInventario');
+    ocultarButton.addEventListener("click", ocultarInventario);
+
+    function ocultarInventario() {
+        document.getElementById("itemList").innerHTML = '';
+        changeInventButton();
+
+    }
 
     let formulario = document.querySelector('.add-item');
     formulario.addEventListener('submit', addItem);
