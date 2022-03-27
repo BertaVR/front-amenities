@@ -6,12 +6,12 @@
                 <input type="number" step="any" name="precio" placeholder="Precio" required />
                 <input type="number" name="calidad" placeholder="Calidad" required />
                 <input type="text" name="material" placeholder="Material" required />
-        
+
                 <input type="number" name="demanda" placeholder="Demanda" required />
                 <input type="number" name="stock" placeholder="Stock" required />
             </div>
-            <input type="submit" value="Añadir Item" />
-            <input type="reset" value="Reset" />
+            <input type="submit" class="btn btn-primary" value="Añadir Item" />
+            <input type="reset" class="btn btn-danger" value="Reset" />
         </form>
         <button id="mostrarInventario" type="button" class="btn btn-primary">Mostrar inventario</button>
         <button
@@ -20,7 +20,7 @@
             class="btn btn-danger"
             hidden
         >Ocultar inventario</button>
-        <ul id="itemList">
+        <ul id="itemList" class="list-group">
             <li>Aqui los items...</li>
         </ul>
     </div>
@@ -35,8 +35,13 @@
 .inputsCaracteristicas > input {
     margin: 4px;
 }
+form {
+    margin-bottom: 30px;
+}
 </style>
 <script>
+//import $ from 'jquery'
+
 window.onload = function () {
 
     const serverip = '127.0.0.1:3000'
@@ -86,13 +91,13 @@ window.onload = function () {
         const itemList = document.querySelector('#itemList');
         itemList.innerHTML = items.map((item, i) => {
             return `
-                        <li>
-                            <p id="item${i}"> ${item.nombre}
-                                           ${item.precio}  
-                                            ${item.calidad}  
-                                            ${item.material}
-                                             ${item.demanda}  
-                                             ${item.stock}  
+                        <li  class="list-group-item">
+                            <p id="item${i}"><span class="nombre item${i}"><b>${item.nombre}</b></span>
+                                            precio:  ${item.precio}  
+                                            calidad: ${item.calidad}  
+                                            material:  ${item.material}
+                                            demanda: ${item.demanda}  
+                                            stock: ${item.stock}  
 
 
                                             </p>
@@ -161,5 +166,7 @@ window.onload = function () {
                 console.log(error.message);
             });
     }
+
+
 }
 </script>
