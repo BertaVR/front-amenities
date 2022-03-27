@@ -22,6 +22,13 @@
     </div>
 </template>
 <style>
+ul {
+    list-style: none;
+}
+.items-incluidos {
+    font-weight: bold;
+    color: rgb(49, 0, 141);
+}
 .inputsCaracteristicas {
     display: flex;
     flex-direction: column;
@@ -93,6 +100,24 @@ window.onload = function () {
                             <p id="pack${i}"><span class="nombre pack${i}"><b>${pack.nombre}</b></span>
                                             precio:  ${pack.precio}  
                                             stock:  ${pack.stock}
+                                            <ul>
+                                        <lh class="items-incluidos"> Items incluidos:</lh>
+
+                                            ${pack.items.map((item) => {
+                //TODO:  Refactor
+                return `
+                          <li  class="item_in_pack">
+                              <p id="item"><span class="nombre item"><b>${item.nombre}</b></span>
+                                                                        material:  ${item.material}  
+                                                                        calidad:  ${item.calidad}  
+                                                                        precio:  ${item.precio}  
+                                                                        demanda:  ${item.demanda}  
+
+                                              </p>
+                          </li>
+                          `;
+            }).join('')}
+                                            </ul>
                                             </p>
                                          <button id="pack${i}" type="button" class="btn btn-danger borrarPack">Borrar pack</button>
 
@@ -110,12 +135,12 @@ window.onload = function () {
     }
 
 
-    function borrarPack(e){
-        let id_pack= e.target.id
+    function borrarPack(e) {
+        let id_pack = e.target.id
         let nombre_pack = document.querySelector(`#${id_pack} span`).innerText
-        if (confirm(`Borrar ${nombre_pack}`)){
+        if (confirm(`Borrar ${nombre_pack}`)) {
 
-          fetch(`http://${serverip}/packs/${nombre_pack}`, {
+            fetch(`http://${serverip}/packs/${nombre_pack}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
@@ -134,7 +159,7 @@ window.onload = function () {
                 .catch((error) => {
                     console.log(error.message);
                 });
-                 //ACTUALIZAR LISTA ITEMS
+            //ACTUALIZAR LISTA ITEMS
         }
     }
     /* TENGO UN PROBLEMA CON LAS PROMESAS
