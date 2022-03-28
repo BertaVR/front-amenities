@@ -2,11 +2,17 @@
     <div class="items">
         <form class="add-item">
             <div class="inputsCaracteristicas">
+                <div>
+                    <label for="material">Elige material:</label>
+                    <select name="material" id="material">
+                        <option value="normal">Normal</option>
+                        <option value="indestructible">Indestructible</option>
+                        <option value="consumible">Consumible</option>
+                    </select>
+                </div>
                 <input type="text" name="nombre" placeholder="Nombre" required />
                 <input type="number" step="any" name="precio" placeholder="Precio" required />
                 <input type="number" name="calidad" placeholder="Calidad" required />
-                <input type="text" name="material" placeholder="Material" required />
-
                 <input type="number" name="demanda" placeholder="Demanda" required />
                 <input type="number" name="stock" placeholder="Stock" required />
             </div>
@@ -21,7 +27,7 @@
             hidden
         >Ocultar inventario</button>
         <ul id="itemList" class="list-group">
-            <li>Aqui los items...</li>
+            <li></li>
         </ul>
     </div>
 </template>
@@ -138,7 +144,7 @@ window.onload = function () {
             nombre: this.elements.nombre.value,
             precio: this.elements.precio.value,
             calidad: this.elements.calidad.value,
-            material: (this.elements.material.value).toLowerCase(),
+            material: document.getElementById('material').value,
             demanda: this.elements.demanda.value,
             stock: this.elements.stock.value,
 

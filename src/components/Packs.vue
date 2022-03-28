@@ -17,7 +17,7 @@
             hidden
         >Ocultar inventario</button>
         <ul id="packList" class="list-group">
-            <li>Aqui los items...</li>
+            <li></li>
         </ul>
     </div>
 </template>
