@@ -55,6 +55,9 @@ window.onload = function () {
     const inventButton = document.getElementById('mostrarInventario');
     inventButton.addEventListener("click", inventario);
 
+
+// *******************       GET
+
     function inventario() {
 
 
@@ -111,6 +114,7 @@ window.onload = function () {
                         `;
         }).join('');
     }
+//**************** BOTONES MOSTRAR/OCULTAR
 
     function changeInventButton() {
         document.getElementById('ocultarInventario').hidden = !document.getElementById('ocultarInventario').hidden
@@ -129,6 +133,8 @@ window.onload = function () {
         changeInventButton();
 
     }
+
+//****************************                  POST
 
     let formulario = document.querySelector('.add-item');
     formulario.addEventListener('submit', addItem);
