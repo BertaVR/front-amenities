@@ -1,7 +1,9 @@
 <template>
+<body>
+  <h1>Items</h1>
 
 <Items/>  
-
+</body>
 </template>
 
 <script>

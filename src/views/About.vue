@@ -1,9 +1,9 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <body>
+    <h1>Packs</h1>
       <packs></packs>
 
-  </div>
+  </body>
 </template>
 
 <script>
