@@ -1,13 +1,32 @@
 <template>
     <div class="packs">
         <form class="add-item">
-            <div class="inputsCaracteristicas">
+            <div id="inputsCaracteristicas">
                 <input type="text" name="nombre" placeholder="Nombre" required />
-                <input class="items" type="text" name="item1" placeholder="Item 1" required />
+                <input class="items" type="text" placeholder="Item" required />
             </div>
-
-            <input type="submit" class="btn btn-primary" value="Añadir Pack" />
-            <input type="reset" class="btn btn-danger" value="Reset" />
+            <div class="inputs-botones">
+                <div class="boton-superior">
+                    <button type="button" id="additem" class="btn btn-success">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="bi bi-plus"
+                            viewBox="0 0 16 16"
+                        >
+                            <path
+                                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
+                            />
+                        </svg> Añadir Item
+                    </button>
+                </div>
+                <div class="botones-inferiores">
+                    <input type="submit" class="btn btn-primary" value="Añadir Pack" />
+                    <input type="reset" class="btn btn-danger" value="Reset" />
+                </div>
+            </div>
         </form>
         <button id="mostrarInventario" type="button" class="btn btn-primary">Mostrar inventario</button>
         <button
@@ -25,17 +44,32 @@
 ul {
     list-style: none;
 }
+
+.inputs-botones {
+    display: flex;
+    flex-direction: column;
+    margin: 2px;
+    padding: 2px;
+}
+.inputs-botones > div {
+    margin: 5px;
+}
+
+.botones-inferiores > input {
+    margin: 2px;
+}
+
 .items-incluidos {
     font-weight: bold;
     color: rgb(49, 0, 141);
 }
-.inputsCaracteristicas {
+#inputsCaracteristicas {
     display: flex;
     flex-direction: column;
     margin-left: 30%;
     margin-right: 30%;
 }
-.inputsCaracteristicas > input {
+#inputsCaracteristicas > input {
     margin: 4px;
 }
 form {
@@ -195,5 +229,19 @@ window.onload = function () {
         changeInventButton();
 
     }
+    const addItemButton = document.getElementById('additem');
+    addItemButton.addEventListener("click", addItem);
+    function addItem() {
+        const addItemInput = document.createElement('input');
+        addItemInput.class = 'items';
+        addItemInput.placeholder = 'Item';
+        addItemInput.type = 'text';
+        const contenedor = document.getElementById('inputsCaracteristicas');
+        contenedor.appendChild(addItemInput);
+    }
+
+
 }
+
+
 </script>
