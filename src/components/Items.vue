@@ -11,17 +11,33 @@
                     </select>
                 </div>
                 <input type="text" ref="nombre" name="nombre" placeholder="Nombre" required />
-                <input type="number" ref="precio" step="any" name="precio" placeholder="Precio" required />
+                <input
+                    type="number"
+                    ref="precio"
+                    step="any"
+                    name="precio"
+                    placeholder="Precio"
+                    required
+                />
                 <input type="number" ref="calidad" name="calidad" placeholder="Calidad" required />
                 <input type="number" ref="demanda" name="demanda" placeholder="Demanda" required />
-                <input type="number"  ref="stock" name="stock" placeholder="Stock" required />
+                <input type="number" ref="stock" name="stock" placeholder="Stock" required />
             </div>
-            <button @click.prevent="addItem()"  class="btn btn-primary"  >Añadir item</button>
+            <button @click.prevent="addItem()" class="btn btn-primary">Añadir item</button>
             <input type="reset" class="btn btn-danger" value="Reset" />
         </form>
-        <button @click="inventario()" id="mostrarInventario" type="button" class="btn btn-primary">Mostrar inventario</button>
+        <div class="mensajes">
+            <span hidden class="mensaje" id="exito">Item creado</span>
+            <span hidden class="mensaje" id="error"></span>
+        </div>
         <button
-        @click="ocultarInventario()"
+            @click="inventario()"
+            id="mostrarInventario"
+            type="button"
+            class="btn btn-primary"
+        >Mostrar inventario</button>
+        <button
+            @click="ocultarInventario()"
             id="ocultarInventario"
             type="button"
             class="btn btn-danger"
@@ -33,6 +49,21 @@
     </div>
 </template>
 <style>
+.mensajes{
+        padding-bottom: 15px;
+
+}
+.mensaje {
+    font-size: medium;
+    font-weight: 500;
+}
+#exito {
+    color: rgb(12, 192, 27);
+}
+#error {
+    color: rgb(219, 50, 101);
+
+}
 .inputsCaracteristicas {
     display: flex;
     flex-direction: column;
@@ -52,15 +83,16 @@ form {
 export default {
 
     data() {
-        return{
-        serverip : '127.0.0.1:3000',}
+        return {
+            serverip: '127.0.0.1:3000',
+        }
 
 
 
     },
-           async  created() {
+    async created() {
 
-        },
+    },
     methods: {
 
 
@@ -172,9 +204,15 @@ export default {
                     if (response.ok) {
                         console.log("Response OK Status:", response.status);
                         console.log("Reponse OK status text:", response.statusText);
+                        document.getElementById('exito').hidden = false;
                     } else {
                         console.log("Response Status:", response.status);
                         console.log("Reponse statuts text:", response.statusText);
+                        document.getElementById('exito').hidden = true;
+                        document.getElementById('error').innerHTML = `Ha habido un error: ${response.statusText} `;
+                        document.getElementById('error').hidden = false;
+
+
                     }
                 })
                 .catch((error) => {
