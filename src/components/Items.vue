@@ -54,7 +54,7 @@
 
 }
 .mensaje {
-    font-size: medium;
+    font-size: large;
     font-weight: 500;
 }
 #exito {
@@ -90,7 +90,7 @@ export default {
 
 
     },
-    async created() {
+     created() {
 
     },
     methods: {

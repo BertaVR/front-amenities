@@ -7,7 +7,7 @@
             </div>
             <div class="inputs-botones">
                 <div class="boton-superior">
-                    <button type="button" id="additem" class="btn btn-success">
+                    <button @click="addItem" type="button" id="additem" class="btn btn-success">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
@@ -23,17 +23,23 @@
                     </button>
                 </div>
                 <div class="botones-inferiores">
-                    <input type="submit" class="btn btn-primary" value="Añadir Pack" />
+                    <input type="submit" class="btn btn-primary add-pack" value="Añadir Pack" />
                     <input type="reset" class="btn btn-danger" value="Reset" />
                 </div>
             </div>
         </form>
-        <button id="mostrarInventario" type="button" class="btn btn-primary">Mostrar inventario</button>
+        <button
+            id="mostrarInventario"
+            @click="inventarioPacks"
+            type="button"
+            class="btn btn-primary"
+        >Mostrar inventario</button>
         <button
             id="ocultarInventario"
             type="button"
             class="btn btn-danger"
             hidden
+            @click="ocultarInventario"
         >Ocultar inventario</button>
         <ul id="packList" class="list-group">
             <li></li>
@@ -81,55 +87,63 @@ button {
 </style>
 
 <script>
-window.onload = function () {
 
-    const serverip = '127.0.0.1:3000'
+export default {
 
-    const mostrarButton = document.getElementById('mostrarInventario');
-    mostrarButton.addEventListener("click", inventarioPacks);
-
-    function inventarioPacks() {
-
-
-        var miHeaders = new Headers();
-
-        var miInit = {
-            method: 'GET',
-            headers: miHeaders,
-            mode: 'cors',
-            // cambiarlo a force-cache => carga del disco
-            cache: 'default'
-        };
-
-
-        fetch(`http://${serverip}/packs`, miInit)
-            .then((response) => {
-                if (response.ok) {
-                    console.log("Response Status:", response.status);
-                    console.log("Reponse statuts text:", response.statusText);
-                    response.json().then((json) => {
-                        logPacks(json);
-                        console.log(json)
-                    })
-                    changeInventButton();
-
-                } else {
-                    console.log("Response Status:", response.status);
-                    console.log("Reponse statuts text:", response.statusText);
-                }
-            })
-            .catch((error) => {
-                console.log(error.message);
-            });
-    }
+    data() {
+        return {
+            serverip: '127.0.0.1:3000',
+        }
 
 
 
+    },
+    created() {
 
-    function logPacks(packs) {
-        const packList = document.querySelector('#packList');
-        packList.innerHTML = packs.map((pack, i) => {
-            return `
+    },
+    methods: {
+        inventarioPacks() {
+
+
+            var miHeaders = new Headers();
+
+            var miInit = {
+                method: 'GET',
+                headers: miHeaders,
+                mode: 'cors',
+                // cambiarlo a force-cache => carga del disco
+                cache: 'default'
+            };
+
+
+            fetch(`http://${this.serverip}/packs`, miInit)
+                .then((response) => {
+                    if (response.ok) {
+                        console.log("Response Status:", response.status);
+                        console.log("Reponse statuts text:", response.statusText);
+                        response.json().then((json) => {
+                            this.logPacks(json);
+                            console.log(json)
+                        })
+                        this.changeInventButton();
+
+                    } else {
+                        console.log("Response Status:", response.status);
+                        console.log("Reponse statuts text:", response.statusText);
+                    }
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
+        },
+
+
+
+
+        logPacks(packs) {
+            const packList = document.querySelector('#packList');
+            packList.innerHTML = packs.map((pack, i) => {
+                return `
                         <li  class="list-group-item">
                             <p id="pack${i}"><span class="nombre pack${i}"><b>${pack.nombre}</b></span>
                                             precio:  ${pack.precio}  
@@ -138,8 +152,8 @@ window.onload = function () {
                                         <lh class="items-incluidos"> Items incluidos:</lh>
 
                                             ${pack.items.map((item) => {
-                //TODO:  Refactor
-                return `
+                    //TODO:  Refactor
+                    return `
                           <li  class="item_in_pack">
                               <p id="item"><span class="nombre item"><b>${item.nombre}</b></span>
                                                                         material:  ${item.material}  
@@ -150,98 +164,146 @@ window.onload = function () {
                                               </p>
                           </li>
                           `;
-            }).join('')}
+                }).join('')}
                                             </ul>
                                             </p>
-                                         <button id="pack${i}" type="button" class="btn btn-danger borrarPack">Borrar pack</button>
+                                         <button id="pack${i}" @click="borrarPack" type="button" class="btn btn-danger borrarPack">Borrar pack</button>
 
                         </li>
                         `;
-        }).join('');
-        activarOpcionBorrar();
-    }
+            }).join('');
+            this.activarOpcionBorrar();
+        },
 
-    function activarOpcionBorrar() {
-        document.querySelectorAll('.borrarPack').forEach(b => {
-            b.addEventListener('click', borrarPack);
+        activarOpcionBorrar() { //refactor vue
+            document.querySelectorAll('.borrarPack').forEach(b => {
+                b.addEventListener('click', this.borrarPack);
 
-        });
-    }
+            });
+        },
+        borrarPack(e) {
+            let id_pack = e.target.id
+            let nombre_pack = document.querySelector(`#${id_pack} span`).innerText
+            if (confirm(`Borrar ${nombre_pack}`)) {
 
-
-    function borrarPack(e) {
-        let id_pack = e.target.id
-        let nombre_pack = document.querySelector(`#${id_pack} span`).innerText
-        if (confirm(`Borrar ${nombre_pack}`)) {
-
-            fetch(`http://${serverip}/packs/${nombre_pack}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then((response) => {
-                    if (response.ok) {
-                        console.log("Response OK Status:", response.status);
-                        console.log("Reponse OK status text:", response.statusText);
-                        inventarioPacks();
-                    } else {
-                        console.log("Response Status:", response.status);
-                        console.log("Reponse statuts text:", response.statusText);
+                fetch(`http://${this.serverip}/packs/${nombre_pack}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
                 })
-                .catch((error) => {
-                    console.log(error.message);
-                });
-            //ACTUALIZAR LISTA ITEMS
+                    .then((response) => {
+                        if (response.ok) {
+                            console.log("Response OK Status:", response.status);
+                            console.log("Item borrado:", response.statusText);
+                            this.inventarioPacks();
+                        } else {
+                            console.log("Response Status:", response.status);
+                            console.log("Reponse statuts text:", response.statusText);
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error.message);
+                    });
+            }
+        },
+
+        changeInventButton() {
+            document.getElementById('ocultarInventario').hidden = !document.getElementById('ocultarInventario').hidden
+            document.getElementById('mostrarInventario').hidden = !document.getElementById('ocultarInventario').hidden
+
+
+        },
+        ocultarInventario() {
+            document.getElementById("packList").innerHTML = '';
+            this.changeInventButton();
+
+        },
+        addItem() {
+            const addItemInput = document.createElement('input');
+            addItemInput.placeholder = 'Item';
+            addItemInput.type = 'text';
+            const contenedor = document.getElementById('inputsCaracteristicas');
+            contenedor.appendChild(addItemInput);
+            addItemInput.setAttribute('class', 'items');
+
         }
-    }
-    /* TENGO UN PROBLEMA CON LAS PROMESAS
-    
-    function renderItems(items) {
-          items.map((item, i) => {
-              return `
-                          <li  class="item_in_pack">
-                              <p id="item${i}"><span class="nombre item${i}"><b>${item.nombre}</b></span>
-      
-  
-  
-                                              </p>
-                          </li>
-                          `;
-          }).join('');
-  
-      }*/
-    function changeInventButton() {
-        document.getElementById('ocultarInventario').hidden = !document.getElementById('ocultarInventario').hidden
-        document.getElementById('mostrarInventario').hidden = !document.getElementById('ocultarInventario').hidden
 
 
     }
-
-
-
-    const ocultarButton = document.getElementById('ocultarInventario');
-    ocultarButton.addEventListener("click", ocultarInventario);
-
-    function ocultarInventario() {
-        document.getElementById("packList").innerHTML = '';
-        changeInventButton();
-
-    }
-    const addItemButton = document.getElementById('additem');
-    addItemButton.addEventListener("click", addItem);
-    function addItem() {
-        const addItemInput = document.createElement('input');
-        addItemInput.class = 'items';
-        addItemInput.placeholder = 'Item';
-        addItemInput.type = 'text';
-        const contenedor = document.getElementById('inputsCaracteristicas');
-        contenedor.appendChild(addItemInput);
-    }
-
-
 }
+
+
+
+
+
+
+/* function getItemsOfPack() {
+        let items = document.querySelectorAll('.items')
+        console.log(items)
+        let values = items.map((item) => { item.value })
+        return values
+    }*/
+
+/* function addPack(e) {
+     e.preventDefault();
+
+     let data = {    nombre: this.elements.nombre.value,
+       items: ['pato'],
+
+
+
+
+     };
+
+     fetch(`http://${serverip}/packs/add`, {
+         method: 'POST',
+         body: JSON.stringify(data),
+         headers: {
+             'Content-Type': 'application/json'
+         }
+     })
+         .then((response) => {
+             if (response.ok) {
+                 console.log("Response OK Status:", response.status);
+                 console.log("Reponse OK status text:", response.statusText);
+             } else {
+                 console.log("Response Status:", response.status);
+                 console.log("Reponse statuts text:", response.statusText);
+             }
+         })
+         .catch((error) => {
+             console.log(error.message);
+         });
+ }*/
+
+
+
+
+/* TENGO UN PROBLEMA CON LAS PROMESAS
+ 
+function renderItems(items) {
+      items.map((item, i) => {
+          return `
+                      <li  class="item_in_pack">
+                          <p id="item${i}"><span class="nombre item${i}"><b>${item.nombre}</b></span>
+  
+ 
+ 
+                                          </p>
+                      </li>
+                      `;
+      }).join('');
+ 
+  }*/
+
+
+
+
+
+
+
+
 
 
 </script>
