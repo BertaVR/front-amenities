@@ -2,8 +2,8 @@
     <div class="packs">
         <form class="add-item">
             <div id="inputsCaracteristicas">
-                <input type="text" name="nombre" placeholder="Nombre" required />
-                <input class="items" type="text" placeholder="Item" required />
+                <input  class="form-control" type="text" name="nombre" placeholder="Nombre" required />
+                <input class="items form-control" type="text" placeholder="Item" required />
             </div>
             <div class="inputs-botones">
                 <div class="boton-superior">
@@ -225,7 +225,7 @@ export default {
             addItemInput.type = 'text';
             const contenedor = document.getElementById('inputsCaracteristicas');
             contenedor.appendChild(addItemInput);
-            addItemInput.setAttribute('class', 'items');
+            addItemInput.classList.add('items', 'form-control');
 
         }
 

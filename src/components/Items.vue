@@ -4,14 +4,22 @@
             <div class="inputsCaracteristicas">
                 <div>
                     <label for="material">Elige material:</label>
-                    <select ref="material" name="material" id="material">
+                    <select ref="material" class="form-select" name="material" id="material">
                         <option value="normal">Normal</option>
                         <option value="indestructible">Indestructible</option>
                         <option value="consumible">Consumible</option>
                     </select>
                 </div>
-                <input type="text" ref="nombre" name="nombre" placeholder="Nombre" required />
                 <input
+                    type="text"
+                    class="form-control"
+                    ref="nombre"
+                    name="nombre"
+                    placeholder="Nombre"
+                    required
+                />
+                <input
+                    class="form-control"
                     type="number"
                     ref="precio"
                     step="any"
@@ -19,11 +27,37 @@
                     placeholder="Precio"
                     required
                 />
-                <input type="number" ref="calidad" name="calidad" placeholder="Calidad" required />
-                <input type="number" ref="demanda" name="demanda" placeholder="Demanda" required />
-                <input type="number" ref="stock" name="stock" placeholder="Stock" required />
+                <input
+                    class="form-control"
+                    type="number"
+                    ref="calidad"
+                    name="calidad"
+                    placeholder="Calidad"
+                    required
+                />
+                <input
+                    class="form-control"
+                    type="number"
+                    ref="demanda"
+                    name="demanda"
+                    placeholder="Demanda"
+                    required
+                />
+                <input
+                    class="form-control"
+                    type="number"
+                    ref="stock"
+                    name="stock"
+                    placeholder="Stock"
+                    required
+                />
             </div>
-            <button @click.prevent="addItem()" class="btn btn-primary">Añadir item</button>
+            <input
+                type="submit"
+                @click.prevent="addItem()"
+                class="btn btn-primary"
+                value="Añadir item"
+            />
             <input type="reset" class="btn btn-danger" value="Reset" />
         </form>
         <div class="mensajes">
@@ -49,9 +83,8 @@
     </div>
 </template>
 <style>
-.mensajes{
-        padding-bottom: 15px;
-
+.mensajes {
+    padding-bottom: 15px;
 }
 .mensaje {
     font-size: large;
@@ -62,7 +95,6 @@
 }
 #error {
     color: rgb(219, 50, 101);
-
 }
 .inputsCaracteristicas {
     display: flex;
@@ -90,7 +122,7 @@ export default {
 
 
     },
-     created() {
+    created() {
 
     },
     methods: {
