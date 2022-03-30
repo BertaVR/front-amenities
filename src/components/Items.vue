@@ -4,23 +4,24 @@
             <div class="inputsCaracteristicas">
                 <div>
                     <label for="material">Elige material:</label>
-                    <select name="material" id="material">
+                    <select ref="material" name="material" id="material">
                         <option value="normal">Normal</option>
                         <option value="indestructible">Indestructible</option>
                         <option value="consumible">Consumible</option>
                     </select>
                 </div>
-                <input type="text" name="nombre" placeholder="Nombre" required />
-                <input type="number" step="any" name="precio" placeholder="Precio" required />
-                <input type="number" name="calidad" placeholder="Calidad" required />
-                <input type="number" name="demanda" placeholder="Demanda" required />
-                <input type="number" name="stock" placeholder="Stock" required />
+                <input type="text" ref="nombre" name="nombre" placeholder="Nombre" required />
+                <input type="number" ref="precio" step="any" name="precio" placeholder="Precio" required />
+                <input type="number" ref="calidad" name="calidad" placeholder="Calidad" required />
+                <input type="number" ref="demanda" name="demanda" placeholder="Demanda" required />
+                <input type="number"  ref="stock" name="stock" placeholder="Stock" required />
             </div>
-            <input type="submit" class="btn btn-primary" value="Añadir Item" />
+            <button @click.prevent="addItem()"  class="btn btn-primary"  >Añadir item</button>
             <input type="reset" class="btn btn-danger" value="Reset" />
         </form>
-        <button id="mostrarInventario" type="button" class="btn btn-primary">Mostrar inventario</button>
+        <button @click="inventario()" id="mostrarInventario" type="button" class="btn btn-primary">Mostrar inventario</button>
         <button
+        @click="ocultarInventario()"
             id="ocultarInventario"
             type="button"
             class="btn btn-danger"
@@ -48,58 +49,67 @@ form {
 <script>
 //import $ from 'jquery'
 
-window.onload = function () {
+export default {
 
-    const serverip = '127.0.0.1:3000'
-
-    const inventButton = document.getElementById('mostrarInventario');
-    inventButton.addEventListener("click", inventario);
-
-
-// *******************       GET
-
-    function inventario() {
+    data() {
+        return{
+        serverip : '127.0.0.1:3000',}
 
 
-        var miHeaders = new Headers();
 
-        var miInit = {
-            method: 'GET',
-            headers: miHeaders,
-            mode: 'cors',
-            // cambiarlo a force-cache => carga del disco
-            cache: 'default'
-        };
+    },
+           async  created() {
 
-
-        fetch(`http://${serverip}/items`, miInit)
-            .then((response) => {
-                if (response.ok) {
-                    console.log("Response Status:", response.status);
-                    console.log("Reponse statuts text:", response.statusText);
-                    response.json().then((json) => {
-                        logItems(json)
-                        console.log(json)
-                    })
-                    changeInventButton();
-
-                } else {
-                    console.log("Response Status:", response.status);
-                    console.log("Reponse statuts text:", response.statusText);
-                }
-            })
-            .catch((error) => {
-                console.log(error.message);
-            });
-    }
+        },
+    methods: {
 
 
 
 
-    function logItems(items) {
-        const itemList = document.querySelector('#itemList');
-        itemList.innerHTML = items.map((item, i) => {
-            return `
+        // *******************       GET
+
+        inventario() {
+
+
+            var miHeaders = new Headers();
+
+            var miInit = {
+                method: 'GET',
+                headers: miHeaders,
+                mode: 'cors',
+                // cambiarlo a force-cache => carga del disco
+                cache: 'default'
+            };
+
+
+            fetch(`http://${this.serverip}/items`, miInit)
+                .then((response) => {
+                    if (response.ok) {
+                        console.log("Response Status:", response.status);
+                        console.log("Reponse statuts text:", response.statusText);
+                        response.json().then((json) => {
+                            this.logItems(json)
+                            console.log(json)
+                        })
+                        this.changeInventButton();
+
+                    } else {
+                        console.log("Response Status:", response.status);
+                        console.log("Reponse statuts text:", response.statusText);
+                    }
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
+        },
+
+
+
+
+        logItems(items) {
+            const itemList = document.querySelector('#itemList');
+            itemList.innerHTML = items.map((item, i) => {
+                return `
                         <li  class="list-group-item">
                             <p id="item${i}"><span class="nombre item${i}"><b>${item.nombre}</b></span>
                                             precio:  ${item.precio}  
@@ -112,73 +122,70 @@ window.onload = function () {
                                             </p>
                         </li>
                         `;
-        }).join('');
-    }
-//**************** BOTONES MOSTRAR/OCULTAR
+            }).join('');
+        },
+        //**************** BOTONES MOSTRAR/OCULTAR
 
-    function changeInventButton() {
-        document.getElementById('ocultarInventario').hidden = !document.getElementById('ocultarInventario').hidden
-        document.getElementById('mostrarInventario').hidden = !document.getElementById('ocultarInventario').hidden
-
-
-    }
+        changeInventButton() {
+            document.getElementById('ocultarInventario').hidden = !document.getElementById('ocultarInventario').hidden
+            document.getElementById('mostrarInventario').hidden = !document.getElementById('ocultarInventario').hidden
 
 
-
-    const ocultarButton = document.getElementById('ocultarInventario');
-    ocultarButton.addEventListener("click", ocultarInventario);
-
-    function ocultarInventario() {
-        document.getElementById("itemList").innerHTML = '';
-        changeInventButton();
-
-    }
-
-//****************************                  POST
-
-    let formulario = document.querySelector('.add-item');
-    formulario.addEventListener('submit', addItem);
-
-
-    function addItem(e) {
-        e.preventDefault();
-        // elementos del formulario en un array-like object:
-        // form.elements 
-        // pag 396 libro rhino
-
-        let data = {
-            nombre: this.elements.nombre.value,
-            precio: this.elements.precio.value,
-            calidad: this.elements.calidad.value,
-            material: document.getElementById('material').value,
-            demanda: this.elements.demanda.value,
-            stock: this.elements.stock.value,
+        },
 
 
 
-        };
 
-        fetch(`http://${serverip}/items/add`, {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then((response) => {
-                if (response.ok) {
-                    console.log("Response OK Status:", response.status);
-                    console.log("Reponse OK status text:", response.statusText);
-                } else {
-                    console.log("Response Status:", response.status);
-                    console.log("Reponse statuts text:", response.statusText);
+        ocultarInventario() {
+            document.getElementById("itemList").innerHTML = '';
+            this.changeInventButton();
+
+        },
+
+        //****************************                  POST
+
+
+
+        addItem() {
+
+
+            let data = {
+                nombre: this.$refs.nombre.value,
+                precio: this.$refs.precio.value,
+                calidad: this.$refs.calidad.value,
+                material: document.getElementById('material').value,
+                demanda: this.$refs.demanda.value,
+                stock: this.$refs.stock.value,
+
+
+
+            };
+
+            fetch(`http://${this.serverip}/items/add`, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
                 }
             })
-            .catch((error) => {
-                console.log(error.message);
-            });
+                .then((response) => {
+                    if (response.ok) {
+                        console.log("Response OK Status:", response.status);
+                        console.log("Reponse OK status text:", response.statusText);
+                    } else {
+                        console.log("Response Status:", response.status);
+                        console.log("Reponse statuts text:", response.statusText);
+                    }
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
+        }
     }
-
-
 }
+
+
+
+
+
 </script>
