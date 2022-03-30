@@ -204,6 +204,7 @@ export default {
                     if (response.ok) {
                         console.log("Response OK Status:", response.status);
                         console.log("Reponse OK status text:", response.statusText);
+                        document.getElementById('error').hidden = true;
                         document.getElementById('exito').hidden = false;
                     } else {
                         console.log("Response Status:", response.status);
