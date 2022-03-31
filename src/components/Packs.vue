@@ -2,12 +2,27 @@
     <div class="packs">
         <form class="add-item">
             <div id="inputsCaracteristicas">
-                <input  class="form-control" type="text" name="nombre" placeholder="Nombre" required />
-                <input class="items form-control" type="text" placeholder="Item" required />
+                <input
+                    class="form-control"
+                    type="text"
+                    ref="nombre"
+                    name="nombre"
+                    placeholder="Nombre"
+                    required
+                />
+                <div id="itemList" ref="itemList">
+                    <input
+                        class="items form-control"
+                        ref="item"
+                        type="text"
+                        placeholder="Item"
+                        required
+                    />
+                </div>
             </div>
             <div class="inputs-botones">
                 <div class="boton-superior">
-                    <button @click="addItem" type="button" id="additem" class="btn btn-success">
+                    <button @click="addItem" type="button" class="btn btn-success">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
@@ -23,11 +38,20 @@
                     </button>
                 </div>
                 <div class="botones-inferiores">
-                    <input type="submit" class="btn btn-primary add-pack" value="Añadir Pack" />
+                    <input
+                        type="submit"
+                        class="btn btn-primary add-pack"
+                        @click="addPack"
+                        value="Añadir Pack"
+                    />
                     <input type="reset" class="btn btn-danger" value="Reset" />
                 </div>
             </div>
         </form>
+        <div class="mensajes">
+            <span hidden class="mensaje" id="exito">Item creado</span>
+            <span hidden class="mensaje" id="error"></span>
+        </div>
         <button
             id="mostrarInventario"
             @click="inventarioPacks"
@@ -75,6 +99,13 @@ ul {
     margin-left: 30%;
     margin-right: 30%;
 }
+#inputsCaracteristicas > div {
+    display: flex;
+    flex-direction: column;
+}
+#inputsCaracteristicas > div > input {
+    margin: 4px;
+}
 #inputsCaracteristicas > input {
     margin: 4px;
 }
@@ -99,6 +130,7 @@ export default {
 
     },
     created() {
+        this.manageItemInputs
 
     },
     methods: {
@@ -219,14 +251,62 @@ export default {
             this.changeInventButton();
 
         },
+   
         addItem() {
             const addItemInput = document.createElement('input');
             addItemInput.placeholder = 'Item';
             addItemInput.type = 'text';
-            const contenedor = document.getElementById('inputsCaracteristicas');
+            const contenedor = document.getElementById('itemList');
             contenedor.appendChild(addItemInput);
             addItemInput.classList.add('items', 'form-control');
 
+        },
+
+        getItemsInCurrentPack() {
+            let items = this.$refs.itemList.children
+            let arrayItems = [];
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].value)
+                    arrayItems.push(items[i].value);
+            }
+            return arrayItems;
+        },
+        addPack(e) {
+            e.preventDefault();
+
+            let data = {
+                nombre: this.$refs.nombre.value,
+                items: this.getItemsInCurrentPack(),
+
+
+
+
+            };
+
+            fetch(`http://${this.serverip}/packs/add`, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        console.log("Response OK Status:", response.status);
+                        console.log("Reponse OK status text:", response.statusText);
+                        document.getElementById('error').hidden = true;
+                        document.getElementById('exito').hidden = false; 0
+                    } else {
+                        console.log("Response Status:", response.status);
+                        console.log("Reponse statuts text:", response.statusText);
+                        document.getElementById('exito').hidden = true;
+                        document.getElementById('error').innerHTML = `Ha habido un error: ${response.statusText} <br> Recuerde añadir sólo items que existan actualmente en el inventario de items `;
+                        document.getElementById('error').hidden = false;
+                    }
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
         }
 
 
@@ -238,44 +318,9 @@ export default {
 
 
 
-/* function getItemsOfPack() {
-        let items = document.querySelectorAll('.items')
-        console.log(items)
-        let values = items.map((item) => { item.value })
-        return values
-    }*/
-
-/* function addPack(e) {
-     e.preventDefault();
-
-     let data = {    nombre: this.elements.nombre.value,
-       items: ['pato'],
 
 
-
-
-     };
-
-     fetch(`http://${serverip}/packs/add`, {
-         method: 'POST',
-         body: JSON.stringify(data),
-         headers: {
-             'Content-Type': 'application/json'
-         }
-     })
-         .then((response) => {
-             if (response.ok) {
-                 console.log("Response OK Status:", response.status);
-                 console.log("Reponse OK status text:", response.statusText);
-             } else {
-                 console.log("Response Status:", response.status);
-                 console.log("Reponse statuts text:", response.statusText);
-             }
-         })
-         .catch((error) => {
-             console.log(error.message);
-         });
- }*/
+/* function */
 
 
 
