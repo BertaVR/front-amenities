@@ -133,7 +133,7 @@ export default {
 
         // *******************       GET
         storedPacksVisibillity() {
-            if (localStorage.getItem("mostrarInventario") == 'true') {
+            if (localStorage.getItem("mostrarInventarioItems") == 'true') {
                 this.inventarioItems();
                 document.getElementById('mostrarInventarioBoton').hidden = true
                 document.getElementById('ocultarInventarioBoton').hidden = false
@@ -205,7 +205,7 @@ export default {
         changeInventButton(mostrar) {
             document.getElementById('ocultarInventarioBoton').hidden = !mostrar
             document.getElementById('mostrarInventarioBoton').hidden = mostrar
-            localStorage.setItem("mostrarInventario", document.getElementById('mostrarInventarioBoton').hidden)
+            localStorage.setItem("mostrarInventarioItems", document.getElementById('mostrarInventarioBoton').hidden)
 
         },
 
