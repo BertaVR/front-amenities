@@ -251,20 +251,19 @@ export default {
                 });
         },
         mensajeErrorOExito(status, error) {
-            {
-                if (status === 'exito') {
-                    document.getElementById('error').hidden = true;
-                    document.getElementById('exito').hidden = false;
-                }
-                if (status === 'error') {
-                    document.getElementById('exito').hidden = true;
-                    document.getElementById('error').innerHTML = `Ha habido un error: ${error} `;
-                    document.getElementById('error').hidden = false;
-                }
-
+            if (status === 'exito') {
+                document.getElementById('error').hidden = true;
+                document.getElementById('exito').hidden = false;
             }
+            if (status === 'error') {
+                document.getElementById('exito').hidden = true;
+                document.getElementById('error').innerHTML = `Ha habido un error: ${error} `;
+                document.getElementById('error').hidden = false;
+            }
+
         }
     }
+}
 
 
 
