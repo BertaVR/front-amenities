@@ -65,7 +65,7 @@
             <span hidden class="mensaje" id="error"></span>
         </div>
         <button
-            @click="inventario()"
+            @click="inventarioItems()"
             id="mostrarInventarioBoton"
             type="button"
             class="btn btn-primary"
@@ -122,7 +122,8 @@ export default {
 
 
     },
-    created() {
+    mounted() {
+        this.storedPacksVisibillity()
 
     },
     methods: {
@@ -131,8 +132,19 @@ export default {
 
 
         // *******************       GET
-
-        inventario() {
+        storedPacksVisibillity() {
+            if (localStorage.getItem("mostrarInventario") == 'true') {
+                this.inventarioItems();
+                document.getElementById('mostrarInventarioBoton').hidden = true
+                document.getElementById('ocultarInventarioBoton').hidden = false
+            }
+            else {
+                document.getElementById('mostrarInventarioBoton').hidden = false
+                document.getElementById('ocultarInventarioBoton').hidden = true
+                this.ocultarInventario();
+            }
+        },
+        inventarioItems() {
 
 
             var miHeaders = new Headers();
@@ -155,7 +167,7 @@ export default {
                             this.logItems(json)
                             console.log(json)
                         })
-                        this.changeInventButton();
+                        this.changeInventButton(true);
 
                     } else {
                         console.log("Response Status:", response.status);
@@ -190,10 +202,10 @@ export default {
         },
         //**************** BOTONES MOSTRAR/OCULTAR
 
-        changeInventButton() {
-            document.getElementById('ocultarInventarioBoton').hidden = !document.getElementById('ocultarInventarioBoton').hidden
-            document.getElementById('mostrarInventarioBoton').hidden = !document.getElementById('mostrarInventarioBoton').hidden
-
+        changeInventButton(mostrar) {
+            document.getElementById('ocultarInventarioBoton').hidden = !mostrar
+            document.getElementById('mostrarInventarioBoton').hidden = mostrar
+            localStorage.setItem("mostrarInventario", document.getElementById('mostrarInventarioBoton').hidden)
 
         },
 
@@ -202,7 +214,7 @@ export default {
 
         ocultarInventario() {
             document.getElementById("itemList").innerHTML = '';
-            this.changeInventButton();
+            this.changeInventButton(false);
 
         },
 
