@@ -140,11 +140,24 @@ export default {
 
 
     },
-    created() {
-        this.manageItemInputs
+    mounted() {
+        this.storedPacksVisibillity()
+
     },
     methods: {
-       
+        storedPacksVisibillity() {
+            if (localStorage.getItem("mostrarInventario") == 'true') {
+                this.inventarioPacks();
+
+                document.getElementById('mostrarInventarioBoton').hidden = true
+                document.getElementById('ocultarInventarioBoton').hidden = false
+            }
+            else {
+                document.getElementById('mostrarInventarioBoton').hidden = false
+                document.getElementById('ocultarInventarioBoton').hidden = true
+                this.ocultarInventario();
+            }
+        },
         inventarioPacks() {
 
 
@@ -168,7 +181,7 @@ export default {
                             this.logPacks(json);
                             console.log(json)
                         });
-                        this.changeInventButton();
+                        this.changeInventButton(true);
 
                     } else {
                         console.log("Response Status:", response.status);
@@ -262,14 +275,15 @@ export default {
             }
         },
 
-        changeInventButton() {
-            document.getElementById('ocultarInventarioBoton').hidden = !document.getElementById('ocultarInventarioBoton').hidden
-            document.getElementById('mostrarInventarioBoton').hidden = !document.getElementById('mostrarInventarioBoton').hidden
+        changeInventButton(mostrar) {
+            document.getElementById('ocultarInventarioBoton').hidden = !mostrar
+            document.getElementById('mostrarInventarioBoton').hidden = mostrar
+            localStorage.setItem("mostrarInventario", document.getElementById('mostrarInventarioBoton').hidden)
 
         },
         ocultarInventario() {
             document.getElementById("packList").innerHTML = '';
-            this.changeInventButton();
+            this.changeInventButton(false);
 
         },
 
