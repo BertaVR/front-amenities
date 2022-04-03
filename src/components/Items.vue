@@ -236,7 +236,7 @@ export default {
                     if (response.ok) {
                         console.log("Response OK Status:", response.status);
                         console.log("Reponse OK status text:", response.statusText);
-                        this.messageOnErrorOrSuccess('success')
+                        this.messageOnErrorOrSuccess('exito')
                     } else {
                         console.log("Response Status:", response.status);
                         console.log("Reponse statuts text:", response.statusText);
@@ -250,20 +250,21 @@ export default {
                     console.log(error.message);
                 });
         },
-        messageOnErrorOrSuccess(status, error) {
-            if (status == 'success') {
-                document.getElementById('error').hidden = true;
-                document.getElementById('exito').hidden = false;
-            }
-            if (status == 'error') {
-                document.getElementById('exito').hidden = true;
-                document.getElementById('error').innerHTML = `Ha habido un error: ${error} `;
-                document.getElementById('error').hidden = false;
-            }
+        mensajeErrorOExito(status, error) {
+            {
+                if (status === 'exito') {
+                    document.getElementById('error').hidden = true;
+                    document.getElementById('exito').hidden = false;
+                }
+                if (status === 'error') {
+                    document.getElementById('exito').hidden = true;
+                    document.getElementById('error').innerHTML = `Ha habido un error: ${error} `;
+                    document.getElementById('error').hidden = false;
+                }
 
+            }
         }
     }
-}
 
 
 
