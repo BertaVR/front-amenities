@@ -236,14 +236,12 @@ export default {
                     if (response.ok) {
                         console.log("Response OK Status:", response.status);
                         console.log("Reponse OK status text:", response.statusText);
-                        document.getElementById('error').hidden = true;
-                        document.getElementById('exito').hidden = false;
+                        this.messageOnErrorOrSuccess('success')
                     } else {
                         console.log("Response Status:", response.status);
                         console.log("Reponse statuts text:", response.statusText);
-                        document.getElementById('exito').hidden = true;
-                        document.getElementById('error').innerHTML = `Ha habido un error: ${response.statusText} `;
-                        document.getElementById('error').hidden = false;
+                        this.messageOnErrorOrSuccess('error', response.statusText)
+
 
 
                     }
@@ -251,6 +249,18 @@ export default {
                 .catch((error) => {
                     console.log(error.message);
                 });
+        },
+        messageOnErrorOrSuccess(status, error) {
+            if (status == 'success') {
+                document.getElementById('error').hidden = true;
+                document.getElementById('exito').hidden = false;
+            }
+            if (status == 'error') {
+                document.getElementById('exito').hidden = true;
+                document.getElementById('error').innerHTML = `Ha habido un error: ${error} `;
+                document.getElementById('error').hidden = false;
+            }
+
         }
     }
 }
