@@ -66,13 +66,13 @@
         </div>
         <button
             @click="inventario()"
-            id="mostrarInventario"
+            id="mostrarInventarioBoton"
             type="button"
             class="btn btn-primary"
         >Mostrar inventario</button>
         <button
             @click="ocultarInventario()"
-            id="ocultarInventario"
+            id="ocultarInventarioBoton"
             type="button"
             class="btn btn-danger"
             hidden
@@ -191,8 +191,8 @@ export default {
         //**************** BOTONES MOSTRAR/OCULTAR
 
         changeInventButton() {
-            document.getElementById('ocultarInventario').hidden = !document.getElementById('ocultarInventario').hidden
-            document.getElementById('mostrarInventario').hidden = !document.getElementById('ocultarInventario').hidden
+            document.getElementById('ocultarInventarioBoton').hidden = !document.getElementById('ocultarInventarioBoton').hidden
+            document.getElementById('mostrarInventarioBoton').hidden = !document.getElementById('mostrarInventarioBoton').hidden
 
 
         },

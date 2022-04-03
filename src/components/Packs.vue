@@ -53,13 +53,13 @@
             <span hidden class="mensaje" id="error"></span>
         </div>
         <button
-            id="mostrarInventario"
+            id="mostrarInventarioBoton"
             @click="inventarioPacks"
             type="button"
             class="btn btn-primary"
         >Mostrar inventario</button>
         <button
-            id="ocultarInventario"
+            id="ocultarInventarioBoton"
             type="button"
             class="btn btn-danger"
             hidden
@@ -142,9 +142,9 @@ export default {
     },
     created() {
         this.manageItemInputs
-
     },
     methods: {
+       
         inventarioPacks() {
 
 
@@ -263,9 +263,8 @@ export default {
         },
 
         changeInventButton() {
-            document.getElementById('ocultarInventario').hidden = !document.getElementById('ocultarInventario').hidden
-            document.getElementById('mostrarInventario').hidden = !document.getElementById('ocultarInventario').hidden
-
+            document.getElementById('ocultarInventarioBoton').hidden = !document.getElementById('ocultarInventarioBoton').hidden
+            document.getElementById('mostrarInventarioBoton').hidden = !document.getElementById('mostrarInventarioBoton').hidden
 
         },
         ocultarInventario() {
