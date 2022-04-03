@@ -49,7 +49,7 @@
             </div>
         </form>
         <div class="mensajes">
-            <span hidden class="mensaje" id="exito">Item creado</span>
+            <span hidden class="mensaje" id="exito">Pack creado</span>
             <span hidden class="mensaje" id="error"></span>
         </div>
         <button
@@ -251,7 +251,7 @@ export default {
             this.changeInventButton();
 
         },
-   
+
         addItem() {
             const addItemInput = document.createElement('input');
             addItemInput.placeholder = 'Item';
@@ -294,19 +294,31 @@ export default {
                     if (response.ok) {
                         console.log("Response OK Status:", response.status);
                         console.log("Reponse OK status text:", response.statusText);
-                        document.getElementById('error').hidden = true;
-                        document.getElementById('exito').hidden = false; 0
+                        this.messageOnErrorOrSuccess('sucess')
+
                     } else {
                         console.log("Response Status:", response.status);
                         console.log("Reponse statuts text:", response.statusText);
-                        document.getElementById('exito').hidden = true;
-                        document.getElementById('error').innerHTML = `Ha habido un error: ${response.statusText} <br> Recuerde añadir sólo items que existan actualmente en el inventario de items `;
-                        document.getElementById('error').hidden = false;
+                        this.messageOnErrorOrSuccess('error', response.statusText)
+
                     }
                 })
                 .catch((error) => {
                     console.log(error.message);
                 });
+        },
+
+        messageOnErrorOrSuccess(status, error) {
+            if (status == 'success') {
+                document.getElementById('error').hidden = true;
+                document.getElementById('exito').hidden = false;
+            }
+            if (status == 'error') {
+                document.getElementById('exito').hidden = true;
+                `Ha habido un error: ${error} <br> Recuerde añadir sólo items que existan actualmente en el inventario de items `;
+                document.getElementById('error').hidden = false; document.getElementById('error').hidden = false;
+            }
+
         }
 
 
