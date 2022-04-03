@@ -294,12 +294,12 @@ export default {
                     if (response.ok) {
                         console.log("Response OK Status:", response.status);
                         console.log("Reponse OK status text:", response.statusText);
-                        this.messageOnErrorOrSuccess('exito')
+                        this.mensajeErrorOExito('exito')
 
                     } else {
                         console.log("Response Status:", response.status);
                         console.log("Reponse statuts text:", response.statusText);
-                        this.messageOnErrorOrSuccess('error', response.statusText)
+                        this.mensajeErrorOExito('error', response.statusText)
 
                     }
                 })
