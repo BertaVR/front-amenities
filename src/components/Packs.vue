@@ -68,6 +68,14 @@
         <ul id="packList" class="list-group">
             <li></li>
         </ul>
+        <div
+            class="modal fade bd-example-modal-lg"
+            id="myModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="myLargeModalLabel"
+            aria-hidden="true"
+        ></div>
     </div>
 </template>
 <style>
@@ -119,6 +127,9 @@ button {
 
 <script>
 
+//const $ = require('jquery')
+
+import * as bootstrap from "bootstrap";
 export default {
 
     data() {
@@ -156,7 +167,7 @@ export default {
                         response.json().then((json) => {
                             this.logPacks(json);
                             console.log(json)
-                        })
+                        });
                         this.changeInventButton();
 
                     } else {
@@ -180,6 +191,8 @@ export default {
                             <p id="pack${i}"><span class="nombre pack${i}"><b>${pack.nombre}</b></span>
                                             precio:  ${pack.precio}  
                                             stock:  ${pack.stock}
+                                            calidad:  ${pack.calidad}  
+
                                             <ul>
                                         <lh class="items-incluidos"> Items incluidos:</lh>
 
@@ -199,17 +212,26 @@ export default {
                 }).join('')}
                                             </ul>
                                             </p>
-                                         <button id="pack${i}" @click="borrarPack" type="button" class="btn btn-danger borrarPack">Borrar pack</button>
+                                         <button id="pack${i}" type="button" class="btn btn-danger borrarPack">Borrar pack</button>
+                                         <button id="pack${i}" type="button" class="btn btn-warning editarPack">Ver pack</button>
 
                         </li>
                         `;
             }).join('');
             this.activarOpcionBorrar();
+            this.activarOpcionEditar();
         },
 
         activarOpcionBorrar() { //refactor vue
             document.querySelectorAll('.borrarPack').forEach(b => {
                 b.addEventListener('click', this.borrarPack);
+
+            });
+        },
+
+        activarOpcionEditar() { //refactor vue
+            document.querySelectorAll('.editarPack').forEach(b => {
+                b.addEventListener('click', this.getPackToEdit);
 
             });
         },
@@ -316,9 +338,109 @@ export default {
             if (status === 'error') {
                 document.getElementById('exito').hidden = true;
                 document.getElementById('error').innerHTML = `Ha habido un error: ${error} <br> Recuerde añadir sólo items que existan actualmente en el inventario de items `;
-                document.getElementById('error').hidden = false; 
+                document.getElementById('error').hidden = false;
             }
 
+        },
+        getPackToEdit(e) {
+            let id_pack = e.target.id
+            let nombre_pack = document.querySelector(`#${id_pack} span`).innerText
+
+            fetch(`http://${this.serverip}/packs/${nombre_pack}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        console.log("Response OK Status:", response.status);
+                        console.log("Item encontrado:", response.statusText);
+                        response.json().then((json) => {
+                            this.renderizarModalEditar(json);
+                            console.log(json)
+                        })
+                    } else {
+                        console.log("Response Status:", response.status);
+                        console.log("Reponse statuts text:", response.statusText);
+                    }
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
+
+        }
+        ,
+        renderizarModalEditar(pack) {
+            document.getElementById('myModal').innerHTML = `
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Editar ${pack.nombre}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                <label for="nombre">Nombre del pack:</label><br>
+                                     <input type="text" id="cambiarNombre" name="cambiarNombre" ref="cambiarNombre"value="${pack.nombre}""><br>
+                                     ${pack.items.map((item, i) => {
+                let numeroItem = i + 1
+                //TODO:  Refactor
+                return `
+                         <label for="item${numeroItem}">Item ${numeroItem}:</label><br>
+                                     <input type="text" class="item" name="item${numeroItem}" value="${item.nombre}"><br>
+                          `;
+            }).join('')}
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" id="cambiarNombre" disabled class="btn btn-primary">Cambiar Nombre</button>
+                                                                         <!–– Desactivar botón editar ya que no funciona ––>
+
+                            </div>
+                        </div>
+                    </div>`
+            this.abrirModalEditar(pack)
+
+        },
+        abrirModalEditar(pack) {
+            var myModal = new bootstrap.Modal(document.getElementById('myModal'));
+            myModal.show();
+            this.activarOpcionCambiarNombre(pack)
+
+        },
+        activarOpcionCambiarNombre(pack) {
+            document.querySelector('#cambiarNombre').addEventListener('click', this.cambiarNombre(pack));
+
+
+        },
+
+        cambiarNombre(pack) {
+            if (this == EventTarget) {
+                console.log('hello')
+
+                fetch(`http://${this.serverip}/packs/${pack.nombre}/cambiarNombre/${this.$refs.nombre.value}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then((response) => {
+                        if (response.ok) {
+                            console.log("Response OK Status:", response.status);
+                            console.log("Reponse OK status text:", response.statusText);
+
+                        } else {
+                            console.log("Response Status:", response.status);
+                            console.log("Reponse statuts text:", response.statusText);
+
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error.message);
+                    });
+            }
         }
 
 
