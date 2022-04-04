@@ -1,6 +1,6 @@
 <template>
     <div class="packs">
-        <form class="add-item">
+        <form class="add-item" @reset="disableSubmitButton(true)">
             <div id="inputsCaracteristicas">
                 <input
                     @keyup="dontAllowBlankFields()"
@@ -149,6 +149,9 @@ export default {
 
     },
     methods: {
+        disableSubmitButton(disabled){
+             document.getElementById('add-pack').disabled = disabled;
+        },
         dontAllowBlankFields() {
             var areThereEmptyFields = false;
             let fields = document.querySelectorAll('input.form-control')
@@ -158,7 +161,7 @@ export default {
                 }
 
             }
-            document.getElementById('add-pack').disabled = areThereEmptyFields;
+            this.disableSubmitButton(areThereEmptyFields);
 
 
         },

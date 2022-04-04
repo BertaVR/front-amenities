@@ -1,6 +1,6 @@
 <template>
     <div class="items">
-        <form class="add-item">
+        <form class="add-item" @reset="disableSubmitButton(true)">
             <div class="inputsCaracteristicas">
                 <div>
                     <label for="material">Elige material:</label>
@@ -65,7 +65,12 @@
                 value="Añadir item"
                 id="add-item"
             />
-            <input type="reset" class="btn btn-danger" value="Reset" />
+            <input
+                type="reset"
+                class="btn btn-danger"
+                @click="dontAllowBlankFields()"
+                value="Reset"
+            />
         </form>
         <div class="mensajes">
             <span hidden class="mensaje" id="exito">Item creado</span>
@@ -134,16 +139,19 @@ export default {
 
     },
     methods: {
+        disableSubmitButton(disabled) {
+            document.getElementById('add-item').disabled = disabled;
+        },
         dontAllowBlankFields() {
             var areThereEmptyFields = false;
             let fields = document.querySelectorAll('input.form-control')
             for (var i = 0; i < fields.length; i++) {
                 if (fields[i].required && !fields[i].value) {
-                    areThereEmptyFields  = true;
+                    areThereEmptyFields = true;
                 }
 
             }
-            document.getElementById('add-item').disabled = areThereEmptyFields ;
+            this.disableSubmitButton(areThereEmptyFields);
 
 
         },
