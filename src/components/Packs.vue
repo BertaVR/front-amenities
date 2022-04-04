@@ -306,7 +306,7 @@ export default {
 
         addItem() {
             const addItemInput = document.createElement('input');
-            addItemInput.placeholder = 'Item';
+            addItemInput.placeholder = 'Item (opcional)';
             addItemInput.type = 'text';
             const contenedor = document.getElementById('itemList');
             contenedor.appendChild(addItemInput);

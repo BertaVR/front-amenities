@@ -15,7 +15,7 @@
                     class="form-control"
                     ref="nombre"
                     name="nombre"
-                    placeholder="Nombre"
+                    placeholder="Nombre (obligatorio)"
                     required
                     @keyup="dontAllowBlankFields()"
                 />
@@ -25,7 +25,7 @@
                     ref="precio"
                     step="any"
                     name="precio"
-                    placeholder="Precio"
+                    placeholder="Precio (obligatorio)"
                     required
                     @keyup="dontAllowBlankFields()"
                 />
@@ -34,7 +34,7 @@
                     type="number"
                     ref="calidad"
                     name="calidad"
-                    placeholder="Calidad"
+                    placeholder="Calidad (obligatorio)"
                     required
                     @keyup="dontAllowBlankFields()"
                 />
@@ -43,7 +43,7 @@
                     type="number"
                     ref="demanda"
                     name="demanda"
-                    placeholder="Demanda"
+                    placeholder="Demanda (obligatorio)"
                     required
                     @keyup="dontAllowBlankFields()"
                 />
@@ -52,7 +52,7 @@
                     type="number"
                     ref="stock"
                     name="stock"
-                    placeholder="Stock"
+                    placeholder="Stock (obligatorio)"
                     required
                     @keyup="dontAllowBlankFields()"
                 />
