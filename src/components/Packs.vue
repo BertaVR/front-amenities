@@ -408,9 +408,7 @@ export default {
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" id="cambiarNombre"  ">Cambiar Nombre</button>
-                                                                         <!–– Desactivar botón editar ya que no funciona ––>
-
+                                <button type="button" id="cambiarNombre" class="btn btn-primary" ">Cambiar Nombre</button>
                             </div>
                         </div>
                     </div>`
