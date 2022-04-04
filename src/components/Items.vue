@@ -34,7 +34,7 @@
                     type="number"
                     ref="calidad"
                     name="calidad"
-                    placeholder="Calidad (obligatorio)"
+                    placeholder="Calidad (obligatorio) - max 50"
                     required
                     @keyup="dontAllowBlankFields()"
                 />
@@ -43,7 +43,7 @@
                     type="number"
                     ref="demanda"
                     name="demanda"
-                    placeholder="Demanda (obligatorio)"
+                    placeholder="Demanda (obligatorio) - max 100"
                     required
                     @keyup="dontAllowBlankFields()"
                 />
