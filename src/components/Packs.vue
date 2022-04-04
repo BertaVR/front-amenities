@@ -418,7 +418,7 @@ export default {
                 //TODO:  Refactor
                 return `
                          <label for="item${numeroItem}">Item ${numeroItem}:</label><br>
-                                     <input type="text" class="item" name="item${numeroItem}" value="${item.nombre}"><br>
+                                     <input type="text" readonly class="item" name="item${numeroItem}" value="${item.nombre}"><br>
                           `;
             }).join('')}
                                 </form>
