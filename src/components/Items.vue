@@ -17,6 +17,7 @@
                     name="nombre"
                     placeholder="Nombre"
                     required
+                    @keyup="dontAllowBlankFields()"
                 />
                 <input
                     class="form-control"
@@ -26,6 +27,7 @@
                     name="precio"
                     placeholder="Precio"
                     required
+                    @keyup="dontAllowBlankFields()"
                 />
                 <input
                     class="form-control"
@@ -34,6 +36,7 @@
                     name="calidad"
                     placeholder="Calidad"
                     required
+                    @keyup="dontAllowBlankFields()"
                 />
                 <input
                     class="form-control"
@@ -42,6 +45,7 @@
                     name="demanda"
                     placeholder="Demanda"
                     required
+                    @keyup="dontAllowBlankFields()"
                 />
                 <input
                     class="form-control"
@@ -50,13 +54,16 @@
                     name="stock"
                     placeholder="Stock"
                     required
+                    @keyup="dontAllowBlankFields()"
                 />
             </div>
             <input
+                disabled
                 type="submit"
                 @click.prevent="addItem()"
                 class="btn btn-primary"
                 value="Añadir item"
+                id="add-item"
             />
             <input type="reset" class="btn btn-danger" value="Reset" />
         </form>
@@ -127,11 +134,22 @@ export default {
 
     },
     methods: {
+        dontAllowBlankFields() {
+            var emptyField = false;
+            let fields = document.querySelectorAll('input.form-control')
+            for (var i = 0; i < fields.length; i++) {
+                if (fields[i].required && !fields[i].value) {
+                    emptyField = true;
+                }
+
+            }
+            if (emptyField) document.getElementById('add-item').disabled = true;
+            if (!emptyField) document.getElementById('add-item').disabled = false;
 
 
+        },
 
 
-        // *******************       GET
         storedPacksVisibillity() {
             if (localStorage.getItem("mostrarInventarioItems") == 'true') {
                 this.inventarioItems();
@@ -144,6 +162,8 @@ export default {
                 this.ocultarInventario();
             }
         },
+        // *******************       GET
+
         inventarioItems() {
 
 
