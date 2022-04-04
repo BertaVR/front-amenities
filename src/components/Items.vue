@@ -135,16 +135,15 @@ export default {
     },
     methods: {
         dontAllowBlankFields() {
-            var emptyField = false;
+            var areThereEmptyFields = false;
             let fields = document.querySelectorAll('input.form-control')
             for (var i = 0; i < fields.length; i++) {
                 if (fields[i].required && !fields[i].value) {
-                    emptyField = true;
+                    areThereEmptyFields  = true;
                 }
 
             }
-            if (emptyField) document.getElementById('add-item').disabled = true;
-            if (!emptyField) document.getElementById('add-item').disabled = false;
+            document.getElementById('add-item').disabled = areThereEmptyFields ;
 
 
         },
