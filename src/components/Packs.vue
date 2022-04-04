@@ -419,6 +419,7 @@ export default {
                 return `
                          <label for="item${numeroItem}">Item ${numeroItem}:</label><br>
                                      <input type="text" readonly class="item" name="item${numeroItem}" value="${item.nombre}"><br>
+                                     <!--No he podido implementar editar items, por eso son read only-->
                           `;
             }).join('')}
                                 </form>
