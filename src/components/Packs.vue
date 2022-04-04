@@ -408,52 +408,52 @@ export default {
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" id="cambiarNombre" disabled class="btn btn-primary">Cambiar Nombre</button>
+                                <button type="button" id="cambiarNombre"  ">Cambiar Nombre</button>
                                                                          <!–– Desactivar botón editar ya que no funciona ––>
 
                             </div>
                         </div>
                     </div>`
+            this.nombrePackActual = pack.nombre
             this.abrirModalEditar(pack)
 
         },
-        abrirModalEditar(pack) {
+        abrirModalEditar() {
             var myModal = new bootstrap.Modal(document.getElementById('myModal'));
             myModal.show();
-            this.activarOpcionCambiarNombre(pack)
+            this.activarOpcionCambiarNombre()
 
         },
-        activarOpcionCambiarNombre(pack) {
-            document.querySelector('#cambiarNombre').addEventListener('click', this.cambiarNombre(pack));
+        activarOpcionCambiarNombre() {
+            document.querySelector('button#cambiarNombre').addEventListener('click', this.cambiarNombre);
 
 
         },
 
-        cambiarNombre(pack) {
-            if (this == EventTarget) {
-                console.log('hello')
+        cambiarNombre() {
+            console.log('Cambiando nombre')
 
-                fetch(`http://${this.serverip}/packs/${pack.nombre}/cambiarNombre/${this.$refs.nombre.value}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
+            fetch(`http://${this.serverip}/packs/${this.nombrePackActual}/cambiarNombre/${document.getElementById('cambiarNombre').value}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        console.log("Response OK Status:", response.status);
+                        console.log("Reponse OK status text:", response.statusText);
+
+                    } else {
+                        console.log("Response Status:", response.status);
+                        console.log("Reponse statuts text:", response.statusText);
+
                     }
                 })
-                    .then((response) => {
-                        if (response.ok) {
-                            console.log("Response OK Status:", response.status);
-                            console.log("Reponse OK status text:", response.statusText);
+                .catch((error) => {
+                    console.log(error.message);
+                });
 
-                        } else {
-                            console.log("Response Status:", response.status);
-                            console.log("Reponse statuts text:", response.statusText);
-
-                        }
-                    })
-                    .catch((error) => {
-                        console.log(error.message);
-                    });
-            }
         }
 
 
