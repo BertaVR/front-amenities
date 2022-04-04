@@ -3,19 +3,21 @@
         <form class="add-item">
             <div id="inputsCaracteristicas">
                 <input
+                    @keyup="dontAllowBlankFields()"
                     class="form-control"
                     type="text"
                     ref="nombre"
                     name="nombre"
-                    placeholder="Nombre"
+                    placeholder="Nombre (obligatorio)"
                     required
                 />
                 <div id="itemList" ref="itemList">
                     <input
+                        @keyup="dontAllowBlankFields()"
                         class="items form-control"
                         ref="item"
                         type="text"
-                        placeholder="Item"
+                        placeholder="Item (obligatorio rellenar este item)"
                         required
                     />
                 </div>
@@ -39,6 +41,8 @@
                 </div>
                 <div class="botones-inferiores">
                     <input
+                    disabled
+                        id="add-pack"
                         type="submit"
                         class="btn btn-primary add-pack"
                         @click="addPack"
@@ -145,6 +149,19 @@ export default {
 
     },
     methods: {
+        dontAllowBlankFields() {
+            var areThereEmptyFields = false;
+            let fields = document.querySelectorAll('input.form-control')
+            for (var i = 0; i < fields.length; i++) {
+                if (fields[i].required && !fields[i].value) {
+                    areThereEmptyFields = true;
+                }
+
+            }
+            document.getElementById('add-pack').disabled = areThereEmptyFields;
+
+
+        },
         storedPacksVisibillity() {
             if (localStorage.getItem("mostrarInventarioPacks") == 'true') {
                 this.inventarioPacks();
